@@ -1,0 +1,23 @@
+# =============================================================================
+# File    : k8s/backend/01-service.yaml
+# Purpose : ClusterIP Service: reachable ONLY inside the cluster.
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  namespace: dso202-assignment-01
+  labels:
+    app: task-tracker
+    tier: backend
+    dso202/assignment: "01"
+    dso202/managed-by: declarative
+spec:
+  type: ClusterIP
+  selector:
+    app: task-tracker
+    tier: backend
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http

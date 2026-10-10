@@ -1,0 +1,21 @@
+# =============================================================================
+# File    : k8s/database/00-pvc.yaml
+# Purpose : Persistent storage for PostgreSQL, from kind's default StorageClass.
+# NOTE    : It stays Pending until a Pod uses it (WaitForFirstConsumer).
+#           That is normal, not a fault.
+# =============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-pvc
+  namespace: dso202-assignment-01
+  labels:
+    app: task-tracker
+    tier: database
+    dso202/assignment: "01"
+    dso202/managed-by: declarative
+spec:
+  accessModes: ["ReadWriteOnce"]   # one node at a time, right for one database
+  resources:
+    requests:
+      storage: 1Gi

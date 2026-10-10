@@ -1,0 +1,12 @@
+# =============================================================================
+# File    : k8s/00-namespace.yaml
+# Purpose : Dedicated namespace for DSO202 Assignment 1 (Task Tracker)
+# Apply   : kubectl apply -f k8s/00-namespace.yaml
+# =============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dso202-assignment-01
+  labels:
+    dso202/assignment: "01"
+    dso202/managed-by: declarative

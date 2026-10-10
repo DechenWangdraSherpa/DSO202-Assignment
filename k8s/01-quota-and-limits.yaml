@@ -1,0 +1,53 @@
+# =============================================================================
+# File    : k8s/01-quota-and-limits.yaml
+# Purpose : Bound the namespace (ResourceQuota) and give containers sane
+#           defaults (LimitRange). Applied BEFORE any Deployment.
+# =============================================================================
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: assignment-quota
+  namespace: dso202-assignment-01
+  labels:
+    dso202/assignment: "01"
+    dso202/managed-by: declarative
+spec:
+  hard:
+    # The three Deployments request ~250m CPU / ~448Mi in total.
+    # 1 core / 1Gi leaves headroom for one extra Pod during a rolling update.
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    # Limits may be over-committed, so the ceiling is higher than requests.
+    limits.cpu: "2"
+    limits.memory: 2Gi
+    # 3 Pods needed; 8 allows rolling-update surge and test Pods.
+    pods: "8"
+    # Only the database needs storage; 2 leaves one spare.
+    persistentvolumeclaims: "2"
+    count/services: "5"
+    count/configmaps: "10"   # includes the auto-created kube-root-ca.crt
+    count/secrets: "5"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: assignment-limits
+  namespace: dso202-assignment-01
+  labels:
+    dso202/assignment: "01"
+    dso202/managed-by: declarative
+spec:
+  limits:
+  - type: Container
+    default:                # applied as limit if a container declares none
+      cpu: 200m
+      memory: 128Mi
+    defaultRequest:         # applied as request if a container declares none
+      cpu: 50m
+      memory: 64Mi
+    min:
+      cpu: 10m
+      memory: 16Mi
+    max:                    # largest single container: sized for PostgreSQL
+      cpu: "1"
+      memory: 512Mi

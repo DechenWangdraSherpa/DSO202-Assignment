@@ -1,0 +1,24 @@
+# =============================================================================
+# File    : k8s/database/02-service.yaml
+# Purpose : HEADLESS Service (clusterIP: None). In-namespace only; DNS returns
+#           the Pod IP directly. Never NodePort/LoadBalancer.
+# =============================================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-svc
+  namespace: dso202-assignment-01
+  labels:
+    app: task-tracker
+    tier: database
+    dso202/assignment: "01"
+    dso202/managed-by: declarative
+spec:
+  clusterIP: None
+  selector:
+    app: task-tracker
+    tier: database
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: postgres
