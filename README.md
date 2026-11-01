@@ -1,6 +1,7 @@
 # DSO202 – Assignment 01 & 02
 
 Task Tracker (frontend + backend + PostgreSQL) deployed to a local `kind` cluster.
+Assignment 02 improves it with Unit 2 concepts: StatefulSet, RBAC, CRD and Ingress.
 
 ## Reports
 
@@ -13,9 +14,10 @@ Task Tracker (frontend + backend + PostgreSQL) deployed to a local `kind` cluste
 
 ```
 backend/ db/ frontend/        application source and Dockerfiles
-k8s/                          Kubernetes manifests
+k8s/                          Assignment 01 manifests
   00-namespace.yaml ... 03-secret.yaml
   database/ backend/ frontend/
+  assignment02/               Assignment 02 manifests (01 to 08)
 evidence/screenshots/
   assignment01/  assignment02/
 Reports/                      reports in markdown
@@ -39,7 +41,11 @@ kubectl apply -f k8s/02-configmap.yaml -f k8s/03-secret.yaml
 kubectl apply -f k8s/database/
 kubectl apply -f k8s/backend/
 kubectl apply -f k8s/frontend/
-kubectl get all -n dso202-assignment-01
 ```
 
 Open http://localhost:30080.
+
+## Run Assignment 02
+
+Runs on top of Assignment 01. Full steps are in [Reports/Assignment-02.md](Reports/Assignment-02.md#5-reproducing).
+Then open http://tasktracker.local:8081 (needs the hosts entry and the Ingress port-forward).

@@ -1,0 +1,88 @@
+# ServiceAccounts for the workloads: no API permissions, token not mounted
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-sa
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, tier: backend, dso202/assignment: "02", dso202/managed-by: declarative}
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend-sa
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, tier: frontend, dso202/assignment: "02", dso202/managed-by: declarative}
+automountServiceAccountToken: false
+---
+# Read-only viewer
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app-viewer
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, dso202/assignment: "02", dso202/managed-by: declarative}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-and-service-reader
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, dso202/assignment: "02", dso202/managed-by: declarative}
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: app-viewer-binding
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, dso202/assignment: "02", dso202/managed-by: declarative}
+subjects:
+- kind: ServiceAccount
+  name: app-viewer
+  namespace: dso202-assignment-01
+roleRef:
+  kind: Role
+  name: pod-and-service-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+# Deployer: create/update, never delete, no Secrets
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deployer
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, dso202/assignment: "02", dso202/managed-by: declarative}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: deployer-role
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, dso202/assignment: "02", dso202/managed-by: declarative}
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+- apiGroups: [""]
+  resources: ["services", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: deployer-binding
+  namespace: dso202-assignment-01
+  labels: {app: task-tracker, dso202/assignment: "02", dso202/managed-by: declarative}
+subjects:
+- kind: ServiceAccount
+  name: deployer
+  namespace: dso202-assignment-01
+roleRef:
+  kind: Role
+  name: deployer-role
+  apiGroup: rbac.authorization.k8s.io
+

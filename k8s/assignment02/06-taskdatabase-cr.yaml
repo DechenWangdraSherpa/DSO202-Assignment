@@ -1,0 +1,14 @@
+apiVersion: dso202.example.com/v1
+kind: TaskDatabase
+metadata:
+  name: task-db
+  namespace: dso202-assignment-01
+  labels:
+    app: task-tracker
+    tier: database
+    dso202/assignment: "02"
+    dso202/managed-by: declarative
+spec:
+  postgresVersion: "17.11"
+  replicas: 1
+  storageSize: 1Gi

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: dso202-assignment-01
+  labels:
+    dso202/assignment: "02"
+    dso202/managed-by: declarative
+data:
+  DB_HOST: db-svc
+  DB_PORT: "5432"
+  DB_NAME: taskdb
+  APP_PORT: "8080"
+  CORS_ORIGIN: "*"
+  POSTGRES_DB: taskdb
+  BACKEND_URL: http://tasktracker.local:8081   # was http://backend-svc:8080

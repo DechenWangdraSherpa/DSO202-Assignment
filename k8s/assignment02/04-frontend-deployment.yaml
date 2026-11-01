@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: dso202-assignment-01
+  labels:
+    app: task-tracker
+    tier: frontend
+    dso202/assignment: "02"
+    dso202/managed-by: declarative
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-tracker
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: task-tracker
+        tier: frontend
+        dso202/assignment: "02"
+        dso202/managed-by: declarative
+    spec:
+      serviceAccountName: frontend-sa
+      automountServiceAccountToken: false
+      containers:
+      - name: web
+        image: dwangshers/dso202-amd64-frontend:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        env:
+        - name: BACKEND_URL
+          valueFrom:
+            configMapKeyRef: { name: app-config, key: BACKEND_URL }
+        resources:
+          requests: { cpu: 50m, memory: 64Mi }
+          limits:   { cpu: 100m, memory: 128Mi }
