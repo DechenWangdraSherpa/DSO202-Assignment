@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - database/00-pvc.yaml
+  - database/01-deployment.yaml
+  - database/02-service.yaml
+  - backend/00-deployment.yaml
+  - backend/01-service.yaml
+  - frontend/00-deployment.yaml
+  - frontend/01-service.yaml
+
+configMapGenerator:
+  - name: app-config
+    envs:
+      - config.env
+
+secretGenerator:
+  - name: app-secret
+    envs:
+      - secret.env

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "task-tracker values",
+  "type": "object",
+  "required": ["environment", "image", "config", "credentials", "database", "backend", "frontend"],
+  "properties": {
+    "environment": { "enum": ["", "dev", "staging", "prod"] },
+    "image": {
+      "type": "object",
+      "required": ["registry", "tag", "pullPolicy"],
+      "properties": {
+        "registry": { "type": "string", "minLength": 1 },
+        "tag": { "type": "string" },
+        "pullPolicy": { "enum": ["Always", "IfNotPresent", "Never"] }
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": ["dbHost", "dbPort", "dbName", "appPort", "corsOrigin", "backendUrl"],
+      "properties": {
+        "dbHost": { "type": "string", "minLength": 1 },
+        "dbPort": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "dbName": { "type": "string", "minLength": 1 },
+        "appPort": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "corsOrigin": { "type": "string" },
+        "backendUrl": { "type": "string", "minLength": 1 }
+      }
+    },
+    "credentials": {
+      "type": "object",
+      "required": ["dbUser", "dbPassword"],
+      "properties": {
+        "dbUser": { "type": "string", "minLength": 1 },
+        "dbPassword": { "type": "string", "minLength": 1 }
+      }
+    },
+    "database": {
+      "type": "object",
+      "required": ["storage", "resources"],
+      "properties": {
+        "storage": { "type": "string", "pattern": "^[0-9]+(Mi|Gi)$" },
+        "resources": { "type": "object" }
+      }
+    },
+    "backend": {
+      "type": "object",
+      "required": ["replicaCount", "resources"],
+      "properties": {
+        "replicaCount": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "resources": { "type": "object" }
+      }
+    },
+    "frontend": {
+      "type": "object",
+      "required": ["replicaCount", "resources"],
+      "properties": {
+        "replicaCount": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "resources": { "type": "object" }
+      }
+    }
+  }
+}

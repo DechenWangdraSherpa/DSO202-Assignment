@@ -1,0 +1,15 @@
+# prod.yaml - overrides for the production release.
+environment: prod
+config:
+  backendUrl: http://localhost:8082
+backend:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 192Mi
+    limits:
+      cpu: 500m
+      memory: 384Mi
+frontend:
+  replicaCount: 2

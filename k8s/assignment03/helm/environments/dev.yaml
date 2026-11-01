@@ -1,0 +1,4 @@
+# dev.yaml - overrides for the development release.
+environment: dev
+config:
+  backendUrl: http://localhost:8081

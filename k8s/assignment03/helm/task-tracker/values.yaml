@@ -1,0 +1,58 @@
+# values.yaml - default configuration of the task-tracker chart.
+# Override with -f <file> or --set <key>=<value>.
+
+# Which environment this release is for. Empty on purpose: the chart refuses
+# to render until dev, staging or prod is chosen.
+environment: ""
+
+image:
+  registry: dwangshers
+  # An empty tag means "use .Chart.AppVersion".
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# Written into the ConfigMap app-config.
+config:
+  dbHost: db-svc
+  dbPort: 5432
+  dbName: taskdb
+  appPort: 8080
+  corsOrigin: "*"
+  # URL the browser uses to reach the backend (through kubectl port-forward).
+  backendUrl: http://localhost:8081
+
+# Written into the Secret app-secret. Demo values only; Helm stores these in
+# the release record, so real credentials must not live in a values file.
+credentials:
+  dbUser: taskuser
+  dbPassword: taskpass
+
+database:
+  storage: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+backend:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+frontend:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
